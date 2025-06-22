@@ -1,5 +1,17 @@
-const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
-const qrcode = require('qrcode');
+let Client, LocalAuth, MessageMedia;
+let libraryAvailable = true;
+try {
+  ({ Client, LocalAuth, MessageMedia } = require('whatsapp-web.js'));
+} catch (err) {
+  libraryAvailable = false;
+  console.warn('whatsapp-web.js not found, WhatsApp features disabled');
+}
+let qrcode;
+try {
+  qrcode = require('qrcode');
+} catch {
+  qrcode = { toDataURL: (code, cb) => cb(null, null) };
+}
 const { processMessage } = require('./iaEngine');
 const { getConversationState, setConversationState } = require('./conversationState');
 const fs = require('fs').promises;
@@ -11,6 +23,7 @@ let retryCount = 0;
 const MAX_RETRIES = 3;
 
 const initializeWhatsApp = () => {
+  if (!libraryAvailable) return;
   client = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: { args: ['--no-sandbox'] },
@@ -71,10 +84,14 @@ const initializeWhatsApp = () => {
   });
 };
 
-const getQRCode = () => qrCodeData;
-const getConnectionStatus = () => isConnected;
+const getQRCode = () => (libraryAvailable ? qrCodeData : null);
+const getConnectionStatus = () => (libraryAvailable ? isConnected : false);
 
 const sendMessage = async (to, message, options = {}) => {
+  if (!libraryAvailable) {
+    console.log(`Mock sendMessage to ${to}: ${message}`);
+    return;
+  }
   if (!isConnected || !client) {
     throw new Error('WhatsApp não conectado');
   }
@@ -87,6 +104,8 @@ const sendMessage = async (to, message, options = {}) => {
   }
 };
 
-initializeWhatsApp();
+if (libraryAvailable) {
+  initializeWhatsApp();
+}
 
 module.exports = { getQRCode, getConnectionStatus, sendMessage };

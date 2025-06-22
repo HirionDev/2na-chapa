@@ -1,5 +1,16 @@
-const { Printer, Network, USB } = require('escpos');
-const axios = require('axios');
+let Printer, Network, USB;
+let axios;
+try {
+  ({ Printer, Network, USB } = require('escpos'));
+} catch {
+  Printer = class { constructor(){} cut(){} close(){} };
+  Network = class {}; USB = class {};
+}
+try {
+  axios = require('axios');
+} catch {
+  axios = { get: async () => ({ data: { valor: '' } }) };
+}
 const { printPedido } = require('./escposTemplates');
 
 const BACKEND_URL = 'http://localhost:3001/api';

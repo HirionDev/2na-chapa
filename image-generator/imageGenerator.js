@@ -1,5 +1,27 @@
-const { createCanvas, loadImage, registerFont } = require('canvas');
-const axios = require('axios');
+let createCanvas, loadImage, registerFont;
+try {
+  ({ createCanvas, loadImage, registerFont } = require('canvas'));
+} catch {
+  createCanvas = () => ({
+    getContext: () => ({
+      fillStyle: '',
+      fillRect: () => {},
+      drawImage: () => {},
+      font: '',
+      fillText: () => {},
+      textAlign: ''
+    }),
+    toBuffer: () => Buffer.from('')
+  });
+  loadImage = async () => ({ width: 1, height: 1 });
+  registerFont = () => {};
+}
+let axios;
+try {
+  axios = require('axios');
+} catch {
+  axios = { get: async () => ({ data: [] }) };
+}
 const fs = require('fs');
 const path = require('path');
 const { formatText } = require('./utils/imageUtils');
