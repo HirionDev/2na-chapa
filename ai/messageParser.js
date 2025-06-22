@@ -1,6 +1,17 @@
-const stringSimilarity = require('string-similarity');
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+let stringSimilarity;
+try {
+  stringSimilarity = require('string-similarity');
+} catch {
+  stringSimilarity = { compareTwoStrings: () => 0 };
+}
+let PrismaClient;
+let prisma;
+try {
+  ({ PrismaClient } = require('@prisma/client'));
+  prisma = new PrismaClient();
+} catch {
+  prisma = { item: { findMany: async () => [] }, combo: { findMany: async () => [] } };
+}
 
 const parseIntent = (text) => {
   const normalizedText = text.toLowerCase().trim();

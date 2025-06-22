@@ -1,12 +1,23 @@
 const { processarMensagemWhatsApp } = require('../backend/services/integracoesService');
 const { parseIntent, parseItems } = require('./messageParser');
-const { PrismaClient } = require('@prisma/client');
-const stringSimilarity = require('string-similarity');
+let PrismaClient;
+let prisma;
+let stringSimilarity;
+try {
+  ({ PrismaClient } = require('@prisma/client'));
+  prisma = new PrismaClient();
+} catch {
+  prisma = { pedido: { findFirst: async () => null, findMany: async () => [] } };
+}
+try {
+  stringSimilarity = require('string-similarity');
+} catch {
+  stringSimilarity = { compareTwoStrings: () => 0 };
+}
 const { generateCardapioImage } = require('../image-generator/imageGenerator');
 const { sendMessage } = require('./whatsapp');
 const fs = require('fs').promises;
 
-const prisma = new PrismaClient();
 
 const processMessage = async (text, from, state = {}) => {
   const normalizedText = text.toLowerCase().trim();

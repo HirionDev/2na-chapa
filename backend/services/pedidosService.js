@@ -8,8 +8,9 @@ dotenv.config();
 const prisma = new PrismaClient();
 
 const isDentroDoHorario = () => {
-  const [abertura, fechamento] = process.env.OPENING_HOURS.split('-').map((t) => {
-    const [h, m] = t.split(':').map(Number);
+  const horario = process.env.OPENING_HOURS || '00:00-23:59';
+  const [abertura, fechamento] = horario.split('-').map((t) => {
+    const [h = 0, m = 0] = t.split(':').map(Number);
     const now = new Date();
     return new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m);
   });
