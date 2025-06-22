@@ -15,6 +15,11 @@ const isDentroDoHorario = () => {
     return new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m);
   });
   const now = new Date();
+  if (fechamento <= abertura) {
+    const fechamentoNextDay = new Date(fechamento);
+    fechamentoNextDay.setDate(fechamentoNextDay.getDate() + 1);
+    return now >= abertura || now <= fechamentoNextDay;
+  }
   return now >= abertura && now <= fechamento;
 };
 
