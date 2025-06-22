@@ -1,0 +1,15 @@
+{
+  "name": "na-chapa-printer",
+  "version": "1.0.0",
+  "description": "Módulo para impressão térmica de pedidos",
+  "main": "printer.js",
+  "dependencies": {
+    "escpos": "^3.0.0-alpha.4",
+    "escpos-network": "^3.0.0-alpha.4",
+    "escpos-usb": "^3.0.0-alpha.4",
+    "axios": "^1.7.2"
+  },
+  "scripts": {
+    "start": "node printer.js"
+  }
+}

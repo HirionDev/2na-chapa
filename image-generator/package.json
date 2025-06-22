@@ -1,0 +1,13 @@
+{
+  "name": "na-chapa-image-generator",
+  "version": "1.0.0",
+  "description": "Módulo para geração de imagens do cardápio",
+  "main": "imageGenerator.js",
+  "dependencies": {
+    "canvas": "^2.11.2",
+    "axios": "^1.7.2"
+  },
+  "scripts": {
+    "start": "node imageGenerator.js"
+  }
+}

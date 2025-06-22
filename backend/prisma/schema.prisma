@@ -1,0 +1,115 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Item {
+  id          Int      @id @default(autoincrement())
+  nome        String
+  preco       Float
+  categoriaId Int
+  categoria   Categoria @relation(fields: [categoriaId], references: [id])
+  ativo       Boolean  @default(true)
+  pedidos     PedidoItem[]
+  combos      ComboItem[]
+  criadoEm    DateTime @default(now())
+  atualizadoEm DateTime @updatedAt
+}
+
+model Categoria {
+  id          Int      @id @default(autoincrement())
+  nome        String   @unique
+  itens       Item[]
+  combos      Combo[]
+  criadoEm    DateTime @default(now())
+  atualizadoEm DateTime @updatedAt
+}
+
+model Combo {
+  id          Int         @id @default(autoincrement())
+  nome        String
+  preco       Float
+  categoriaId Int
+  categoria   Categoria   @relation(fields: [categoriaId], references: [id])
+  ativo       Boolean     @default(true)
+  itens       ComboItem[]
+  pedidos     PedidoCombo[]
+  criadoEm    DateTime    @default(now())
+  atualizadoEm DateTime    @updatedAt
+}
+
+model ComboItem {
+  id          Int      @id @default(autoincrement())
+  comboId     Int
+  itemId      Int
+  quantidade  Int
+  combo       Combo    @relation(fields: [comboId], references: [id])
+  item        Item     @relation(fields: [itemId], references: [id])
+  criadoEm    DateTime @default(now())
+}
+
+model Pedido {
+  id          Int          @id @default(autoincrement())
+  clienteNome String
+  telefone    String?
+  itens       PedidoItem[]
+  combos      PedidoCombo[]
+  total       Float
+  status      String       @default("em_preparacao")
+  tipo        String       @default("balcao") // balcao ou whatsapp
+  pagamento   String       @default("pendente")
+  observacoes String?
+  criadoEm    DateTime     @default(now())
+  atualizadoEm DateTime     @updatedAt
+}
+
+model PedidoItem {
+  id          Int      @id @default(autoincrement())
+  pedidoId    Int
+  itemId      Int
+  quantidade  Int
+  precoUnitario Float
+  pedido      Pedido   @relation(fields: [pedidoId], references: [id])
+  item        Item     @relation(fields: [itemId], references: [id])
+  criadoEm    DateTime @default(now())
+}
+
+model PedidoCombo {
+  id          Int      @id @default(autoincrement())
+  pedidoId    Int
+  comboId     Int
+  quantidade  Int
+  precoUnitario Float
+  pedido      Pedido   @relation(fields: [pedidoId], references: [id])
+  combo       Combo    @relation(fields: [comboId], references: [id])
+  criadoEm    DateTime @default(now())
+}
+
+model Cliente {
+  id          Int      @id @default(autoincrement())
+  nome        String
+  telefone    String   @unique
+  criadoEm    DateTime @default(now())
+  atualizadoEm DateTime @updatedAt
+}
+
+model Configuracao {
+  id          Int      @id @default(autoincrement())
+  chave       String   @unique
+  valor       String
+  criadoEm    DateTime @default(now())
+  atualizadoEm DateTime @updatedAt
+}
+
+model Usuario {
+  id          Int      @id @default(autoincrement())
+  username    String   @unique
+  password    String
+  role        String   @default("admin")
+  criadoEm    DateTime @default(now())
+  atualizadoEm DateTime @updatedAt
+}

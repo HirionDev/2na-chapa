@@ -1,0 +1,15 @@
+{
+  "name": "na-chapa-ai",
+  "version": "1.0.0",
+  "description": "Módulo de IA para integração com WhatsApp",
+  "main": "whatsapp.js",
+  "dependencies": {
+    "@prisma/client": "^5.7.1",
+    "whatsapp-web.js": "^1.24.0", 
+    "qrcode": "^1.5.3",
+    "string-similarity": "^4.0.4"
+  },
+  "scripts": {
+    "start": "node whatsapp.js"
+  }
+}

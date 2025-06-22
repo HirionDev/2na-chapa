@@ -1,0 +1,25 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Environment variables
+.env
+
+# Build artifacts
+/dist
+/build
+/coverage
+
+# Database
+prisma/dev.db
+prisma/dev.db-journal
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# OS-specific
+.DS_Store
+Thumbs.db

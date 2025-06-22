@@ -1,0 +1,12 @@
+{
+  "name": "na-chapa",
+  "version": "1.0.0",
+  "description": "Sistema Na Chapa",
+  "scripts": {
+    "start": "concurrently \"cd frontend && npm start\" \"cd frontend && npm run electron\"",
+    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install && cd ../ai && npm install && cd ../printer && npm install && cd ../image-generator && npm install"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
